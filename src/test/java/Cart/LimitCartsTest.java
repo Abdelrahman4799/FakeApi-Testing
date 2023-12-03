@@ -38,4 +38,15 @@ public class LimitCartsTest {
     }
 
 
+    //test fails :: returned 7 items when request 0
+    @Test
+    public void CheckLimitZero()
+    {
+        given().baseUri(base).queryParam("limit" , 0)
+                .when().get("carts")
+                .then().log().all()
+                .assertThat().body("size()", is(0));
+    }
+
+
 }

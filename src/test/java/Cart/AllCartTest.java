@@ -23,7 +23,7 @@ public class AllCartTest {
         given().baseUri(base)
                 .when().get("carts")
                 .then().log().ifValidationFails()
-                .assertThat().body("id" , everyItem(is(not(empty()))));
+                .assertThat().body("id" , everyItem(not(empty())));
 
     }
     @Test
