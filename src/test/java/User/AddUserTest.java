@@ -8,7 +8,7 @@ import java.io.File;
 import static Cart.AllCartTest.base;
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.*;
 
 public class AddUserTest {
     File body = new File("src/test/resources/userData.json");
@@ -42,5 +42,28 @@ public class AddUserTest {
                 .when().post("users")
                 .then().log().ifValidationFails()
                 .assertThat().body(matchesJsonSchemaInClasspath("single-product-schema.json"));
+    }
+
+    @Test
+    public void CheckID()
+    {
+        given().baseUri(base)
+                .contentType(ContentType.JSON)
+                .body(body)
+                .when().post("users")
+                .then().log().ifValidationFails()
+                .assertThat().body("id", is(not(empty())));
+    }
+
+    //post empty body should return error
+    @Test
+        public void CheckEmptyBody()
+    {
+        given().baseUri(base)
+                .contentType(ContentType.JSON)
+                .body("")
+                .when().post("users")
+                .then().log().ifValidationFails()
+                .assertThat().body("id", is(empty()) );
     }
 }

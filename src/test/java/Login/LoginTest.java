@@ -7,11 +7,12 @@ import java.io.File;
 
 import static io.restassured.RestAssured.*;
 import static Cart.AllCartTest.base;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.*;
 
 public class LoginTest {
     File body = new File("src/test/resources/Login.json");
+    File invalidBody = new File("src/test/resources/invalidLogin.json");
+
     @Test
     public void CheckStatusCode()
     {
@@ -40,5 +41,15 @@ public class LoginTest {
                 .when().post("auth/login")
                 .then().log().ifValidationFails()
                 .assertThat().body("size()",greaterThan(0));
+    }
+
+    @Test
+    public void loginWithInvalid()
+    {
+        given().baseUri(base).contentType(ContentType.JSON)
+                .body(invalidBody)
+                .when().post("auth/login")
+                .then().log().ifValidationFails()
+                .assertThat().statusCode(equalTo(401));
     }
 }
