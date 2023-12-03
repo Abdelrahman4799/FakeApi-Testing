@@ -53,4 +53,18 @@ public class LoginTest {
                 .assertThat().statusCode(equalTo(401))
                 .and().body(containsString("incorrect"));
     }
+
+    @Test
+    public void loginWithEmpty()
+    {
+        File emptyUser = new File("src/test/resources/emptyLogin.json");
+
+
+        given().baseUri(base).contentType(ContentType.JSON)
+                .body(emptyUser)
+                .when().post("auth/login")
+                .then().log().ifValidationFails()
+                .assertThat().statusCode(equalTo(400))
+                .and().body(containsString("not provided"));
+    }
 }
