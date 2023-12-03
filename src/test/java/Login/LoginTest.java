@@ -50,6 +50,7 @@ public class LoginTest {
                 .body(invalidBody)
                 .when().post("auth/login")
                 .then().log().ifValidationFails()
-                .assertThat().statusCode(equalTo(401));
+                .assertThat().statusCode(equalTo(401))
+                .and().body(containsString("incorrect"));
     }
 }
